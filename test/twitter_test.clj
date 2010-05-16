@@ -5,8 +5,15 @@
   )
 
 (deftest mytest-test
-  (let [sr (twitter-search "#teatime" :since-id 13850550195)]
+  (let [sr (twitter-search "#teatime")]
     (println "max id = " (:max-id sr))
-    (foreach #(println (to-euc (:text %)) " (id = " (:id %) ")") (:tweets sr))
+    ;(foreach #(println (to-utf8 (:text %)) " (id = " (:id %) ")") (:tweets sr))
+    )
+
+  (let [res (twitter-search-all "#teatime" :lang "ja")]
+    (println "max id = " (:max-id res))
+    (println "page = " (:page res))
+    (println "tweets count = " (count (:tweets res)))
+    ;(foreach #(println (to-utf8 (:text %))) (take 10 (:tweets res)))
     )
   )
