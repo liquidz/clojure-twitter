@@ -61,21 +61,26 @@
     (if (! su2/blank? locale) (.setLocale q locale))
     (if (! su2/blank? lang) (.setLang q lang))
 
-    (twitter4j-query-result-convert
-      (.. (TwitterFactory.) getInstance (search q))
+    (try
+      (twitter4j-query-result-convert
+        (.. (TwitterFactory.) getInstance (search q))
+        )
+      (catch Exception _ nil)
       )
     )
   )
 
 ; =twitter-search-all
 (defn twitter-search-all [& args]
-  (loop [page 1, res ()]
+  (loop [page 1, res nil]
     (let [qr (apply twitter-search (concat args (list :page page :rpp *twitter-result-per-page*)))]
-      (if (< (count (:tweets qr)) *twitter-result-per-page*)
-        (if (empty? res) qr (combine-query-result res qr))
-        (do
-          (sleep *twitter-sleep-time*)
-          (recur (++ page) (if (empty? res) qr (combine-query-result res qr)))
+      (if (nil? qr) res
+        (if (< (count (:tweets qr)) *twitter-result-per-page*)
+          (if (empty? res) qr (combine-query-result res qr))
+          (do
+            (sleep *twitter-sleep-time*)
+            (recur (++ page) (if (empty? res) qr (combine-query-result res qr)))
+            )
           )
         )
       )
