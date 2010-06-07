@@ -6,7 +6,7 @@
 
 (deftest mytest-test
   ;(let [sr (twitter-search "#yuruyomi_test" :since-id 14356425345)]
-  (let [sr (twitter-search "#yuruyomi_test")]
+  (let [sr (twitter-search-all "#yuruyomi" :since-id 15562499950)]
     (println "max id = " (:max-id sr))
     (foreach #(println (to-utf8 (:text %)) " (id = " (:id %) ")") (:tweets sr))
     )

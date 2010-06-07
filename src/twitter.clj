@@ -76,7 +76,7 @@
     (let [qr (apply twitter-search (concat args (list :page page :rpp *twitter-result-per-page*)))]
       (if (nil? qr) res
         (if (< (count (:tweets qr)) *twitter-result-per-page*)
-          (if (empty? res) qr (combine-query-result res qr))
+          (if (nil? res) qr (combine-query-result res qr))
           (do
             (sleep *twitter-sleep-time*)
             (recur (++ page) (if (empty? res) qr (combine-query-result res qr)))
