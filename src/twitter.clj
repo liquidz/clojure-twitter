@@ -52,18 +52,22 @@
          )
   )
 
+; =get-twitter-instance
+(defn- get-twitter-instance [] (.getInstance (TwitterFactory.)))
+
 ; =twitter-search
 (defnk twitter-search [query :page -1 :since-id -1 :rpp -1 :locale "ja" :lang ""]
   (let [q (Query. query)]
-    (if (pos? page) (.setPage q page))
-    (if (pos? since-id) (.setSinceId q since-id))
-    (if (pos? rpp) (.setRpp q rpp))
-    (if (! su2/blank? locale) (.setLocale q locale))
-    (if (! su2/blank? lang) (.setLang q lang))
+    (when (pos? page) (.setPage q page))
+    (when (pos? since-id) (.setSinceId q since-id))
+    (when (pos? rpp) (.setRpp q rpp))
+    (when (! su2/blank? locale) (.setLocale q locale))
+    (when (! su2/blank? lang) (.setLang q lang))
 
     (try
       (twitter4j-query-result-convert
-        (.. (TwitterFactory.) getInstance (search q))
+        (.search (get-twitter-instance) q)
+        ;(.. (TwitterFactory.) getInstance (search q))
         )
       (catch Exception _ nil)
       )
@@ -84,6 +88,18 @@
           )
         )
       )
+    )
+  )
+
+; =get-twitter-rage-limit
+(defn get-twitter-rate-limit []
+  (let [res (.getRateLimitStatus (get-twitter-instance))]
+    {:remaining-hits (.getRemainingHits res)
+     :hourly-limit (.getHourlyLimit res)
+     :reset-time-in-seconds (.getResetTimeInSeconds res)
+     :reset-time (.getResetTime res)
+     :seconds-until-reset (.getSecondsUntilReset res)
+     }
     )
   )
 
