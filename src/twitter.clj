@@ -64,13 +64,12 @@
     (when (! su2/blank? locale) (.setLocale q locale))
     (when (! su2/blank? lang) (.setLang q lang))
 
-    (try
+;    (try
       (twitter4j-query-result-convert
         (.search (get-twitter-instance) q)
-        ;(.. (TwitterFactory.) getInstance (search q))
         )
-      (catch Exception _ nil)
-      )
+;      (catch Exception _ nil)
+;      )
     )
   )
 
