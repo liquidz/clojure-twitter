@@ -103,17 +103,17 @@
     )
   )
 
-(comment
-(defn get-oauth-access-token [consumer-key consumer-secret]
-  )
-(defn oauth [consumer-key consumer-secret]
-  (let [tw (.. (TwitterFactory.) getInstance)]
-    (.setOAuthConsumer tw consumer-key consumer-secret)
-    (let [request-token (.getOauthRequestToken tw)
-          auth-url (.getAuthorizationURL request-token)
-          ]
-      )
-    )
-  )
-  )
+
+;(defn get-oauth-access-token [consumer-key consumer-secret]
+;  )
+;(defn oauth [consumer-key consumer-secret]
+;  (let [tw (get-twitter-instance)]
+;    (.setOAuthConsumer tw consumer-key consumer-secret)
+;    (let [request-token (.getOauthRequestToken tw)
+;          auth-url (.getAuthorizationURL request-token)
+;          ]
+;      (println "auth url = " auth-url)
+;      )
+;    )
+;  )
 
