@@ -4,6 +4,10 @@
   (:require [clojure.contrib.str-utils2 :as su2])
   )
 
+(def *twitter-result-per-page* 100)
+(def *twitter-sleep-time* 1500)
+
+; definition struct {{{
 (defstruct
   tweet
   :created-at :from-user :from-user-id :id :iso-language-code
@@ -15,13 +19,12 @@
   :max-id :page :query :refresh-url :results-par-page
   :since-id :tweets :warning
   )
-
-(def *twitter-result-per-page* 100)
-(def *twitter-sleep-time* 1500)
+; }}}
 
 ; =sleep
 (defn- sleep [ms] (Thread/sleep ms))
 
+; converter {{{
 ; =twitter4j-tweet-convert
 (defn- twitter4j-tweet-convert [t]
   (struct tweet
@@ -29,6 +32,16 @@
           (.getId t) (.getIsoLanguageCode t) (.getProfileImageUrl t)
           (.getSource t) (.getText t) (.getToUser t) (.getToUserId t)
           )
+  )
+
+; =twitter4j-status-convert
+(defn- twitter4j-status-convert [s]
+  (let [user (.getUser s)]
+    (struct tweet
+            (.getCreatedAt s) (.getScreenName user) (.getId user)
+            (.getId s) "" (.toString (.getProfileImageURL user))
+            (.getSource s) (.getText s) (.getInReplyToScreenName s) (.getInReplyToUserId s))
+    )
   )
 
 ; =twitter4j-query-result-convert
@@ -40,6 +53,7 @@
           (.getWarning q)
           )
   )
+; }}}
 
 ; =combine-query-result
 (defn- combine-query-result [qr1 qr2]
@@ -55,6 +69,13 @@
 ; =get-twitter-instance
 (defn- get-twitter-instance [] (.getInstance (TwitterFactory.)))
 
+; =show-twitter-status
+(defn show-twitter-status [id]
+  (twitter4j-status-convert
+    (.showStatus (get-twitter-instance) id)
+    )
+  )
+
 ; =twitter-search
 (defnk twitter-search [query :page -1 :since-id -1 :rpp -1 :locale "ja" :lang ""]
   (let [q (Query. query)]
@@ -64,12 +85,8 @@
     (when (! su2/blank? locale) (.setLocale q locale))
     (when (! su2/blank? lang) (.setLang q lang))
 
-    (try
-      (twitter4j-query-result-convert
-        (.search (get-twitter-instance) q)
-        ;(.. (TwitterFactory.) getInstance (search q))
-        )
-      (catch Exception _ nil)
+    (twitter4j-query-result-convert
+      (.search (get-twitter-instance) q)
       )
     )
   )
