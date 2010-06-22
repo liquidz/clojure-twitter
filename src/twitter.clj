@@ -142,7 +142,7 @@
   ([consumer-key consumer-secret]
    (let [tw (get-twitter-instance)]
      (.setOAuthConsumer tw consumer-key consumer-secret)
-     (get-oauth-url tw)
+     (get-twitter-oauth-url tw)
      )
    )
   )
