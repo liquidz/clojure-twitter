@@ -1,7 +1,10 @@
 (ns twitter-test
-  (:use simply)
-  (:use twitter)
-  (:use [clojure.test])
+  (:use
+     simply
+     twitter
+     clojure.test
+     )
+  (:require keys)
   )
 
 (deftest mytest-test
@@ -21,5 +24,9 @@
 
 ;  (foreach #(println (first %) " => " (second %)) (get-twitter-rate-limit))
 
-  (p show-twitter-status 15562499950)
+  ;(p show-twitter-status 15562499950)
+
+  (let [[url tw] (get-oauth-url keys/*twitter-consumer-key* keys/*twitter-consumer-secret*)]
+    (println url)
+    )
   )

@@ -120,17 +120,49 @@
     )
   )
 
+; =get-twitter-oauth-access-token
+(defn get-twitter-oauth-access-token  [twitter-instance request-token & pin]
+  (let [access-token (if (zero? (count pin))
+                       (.getOAuthAccessToken twitter-instance request-token)
+                       (.getOAuthAccessToken twitter-instance request-token (first pin)))]
+    [access-token twitter-instance]
+    )
+  )
 
-;(defn get-oauth-access-token [consumer-key consumer-secret]
-;  )
-;(defn oauth [consumer-key consumer-secret]
-;  (let [tw (get-twitter-instance)]
-;    (.setOAuthConsumer tw consumer-key consumer-secret)
-;    (let [request-token (.getOauthRequestToken tw)
-;          auth-url (.getAuthorizationURL request-token)
-;          ]
-;      (println "auth url = " auth-url)
-;      )
-;    )
-;  )
+
+; =get-twitter-oauth-url
+(defn get-twitter-oauth-url
+  ([twitter-instance]
+   (let [request-token (.getOAuthRequestToken twitter-instance)
+         auth-url (.getAuthorizationURL request-token)
+         ]
+     [auth-url request-token twitter-instance]
+     )
+   )
+  ([consumer-key consumer-secret]
+   (let [tw (get-twitter-instance)]
+     (.setOAuthConsumer tw consumer-key consumer-secret)
+     (get-oauth-url tw)
+     )
+   )
+  )
+
+; =twitter-logined?
+(defn twitter-logined? [twitter-instance]
+  (.isOAuthEnabled twitter-instance)
+  )
+
+; =get-twitter-screen-name
+(defn get-twitter-screen-name [twitter-instance]
+  (if (twitter-logined? twitter-instance)
+    (.getScreenName twitter-instance)
+    nil)
+  )
+
+; =twitter-update
+(defn twitter-update [twitter-instance s]
+  (when (and (twitter-logined? twitter-instance) (string? s))
+    (.updateStatus twitter-instance s)
+    )
+  )
 
