@@ -4,7 +4,7 @@
      twitter
      clojure.test
      )
-  (:require keys)
+  ;(:require keys)
   )
 
 (deftest mytest-test
@@ -26,7 +26,8 @@
 
   ;(p show-twitter-status 15562499950)
 
-  (let [[url tw] (get-oauth-url keys/*twitter-consumer-key* keys/*twitter-consumer-secret*)]
-    (println url)
-    )
+;  (let [[url tw] (get-oauth-url keys/*twitter-consumer-key* keys/*twitter-consumer-secret*)]
+;    (println url)
+;    )
+  (p get-twitter-profile-image-url (get-twitter-instance))
   )

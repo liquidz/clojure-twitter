@@ -68,7 +68,7 @@
   )
 
 ; =get-twitter-instance
-(defn- get-twitter-instance [] (.getInstance (TwitterFactory.)))
+(defn get-twitter-instance [] (.getInstance (TwitterFactory.)))
 
 ; =show-twitter-status
 (defn show-twitter-status [id]
@@ -158,6 +158,11 @@
   (if (twitter-logined? twitter-instance)
     (.getScreenName twitter-instance)
     nil)
+  )
+
+; =get-twitter-profile-image-url
+(defn get-twitter-profile-image-url [twitter-instance]
+  (.getProfileImageURL (.showUser twitter-instance (.getId twitter-instance)))
   )
 
 ; =twitter-update

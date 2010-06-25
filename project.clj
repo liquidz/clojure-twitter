@@ -1,5 +1,5 @@
 (defproject
-  org.clojars.liquidz/twitter "0.0.8"
+  org.clojars.liquidz/twitter "0.1.0"
   :description "twitter4j wrapper for clojure"
   :dependencies [[org.clojure/clojure "1.1.0"]
                  [org.clojure/clojure-contrib "1.1.0"]
