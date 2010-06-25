@@ -1,5 +1,6 @@
 (ns twitter
   (:import (twitter4j TwitterFactory Query))
+  (:import (twitter4j.http AccessToken))
   (:use simply)
   (:require [clojure.contrib.str-utils2 :as su2])
   )
@@ -166,3 +167,10 @@
     )
   )
 
+; =get-twitter-authorized-instance
+(defn get-twitter-authorized-instance [consumer-key consumer-secret access-token access-token-secret]
+  (.getOAuthAuthorizedInstance
+    (TwitterFactory.)
+    consumer-key consumer-secret 
+    (AccessToken. access-token access-token-secret))
+  )
