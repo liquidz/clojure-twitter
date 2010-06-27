@@ -162,7 +162,8 @@
 
 ; =get-twitter-profile-image-url
 (defn get-twitter-profile-image-url [twitter-instance]
-  (.getProfileImageURL (.showUser twitter-instance (.getId twitter-instance)))
+  (.. (.showUser twitter-instance (.getId twitter-instance)) getProfileImageURL toString)
+  ;(.getProfileImageURL (.showUser twitter-instance (.getId twitter-instance)))
   )
 
 ; =twitter-update
