@@ -1,8 +1,8 @@
 (ns twitter
   (:import (twitter4j TwitterFactory Query))
   (:import (twitter4j.http AccessToken))
-  (:use simply)
-  (:require [clojure.contrib.str-utils2 :as su2])
+  (:use [simply core])
+  (:require [clojure.contrib.string :as st])
   )
 
 (def *twitter-result-per-page* 100)
@@ -83,8 +83,8 @@
     (when (pos? page) (.setPage q page))
     (when (pos? since-id) (.setSinceId q since-id))
     (when (pos? rpp) (.setRpp q rpp))
-    (when (! su2/blank? locale) (.setLocale q locale))
-    (when (! su2/blank? lang) (.setLang q lang))
+    (when-not (st/blank? locale) (.setLocale q locale))
+    (when-not (st/blank? lang) (.setLang q lang))
 
     (twitter4j-query-result-convert
       (.search (get-twitter-instance) q)
@@ -101,7 +101,7 @@
           (if (nil? res) qr (combine-query-result res qr))
           (do
             (sleep *twitter-sleep-time*)
-            (recur (++ page) (if (empty? res) qr (combine-query-result res qr)))
+            (recur (inc page) (if (empty? res) qr (combine-query-result res qr)))
             )
           )
         )
@@ -163,7 +163,6 @@
 ; =get-twitter-profile-image-url
 (defn get-twitter-profile-image-url [twitter-instance]
   (.. (.showUser twitter-instance (.getId twitter-instance)) getProfileImageURL toString)
-  ;(.getProfileImageURL (.showUser twitter-instance (.getId twitter-instance)))
   )
 
 ; =twitter-update
@@ -177,6 +176,6 @@
 (defn get-twitter-authorized-instance [consumer-key consumer-secret access-token access-token-secret]
   (.getOAuthAuthorizedInstance
     (TwitterFactory.)
-    consumer-key consumer-secret 
+    consumer-key consumer-secret
     (AccessToken. access-token access-token-secret))
   )

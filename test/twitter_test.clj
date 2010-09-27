@@ -1,6 +1,6 @@
 (ns twitter-test
   (:use
-     simply
+     simply.core
      twitter
      clojure.test
      )
@@ -22,12 +22,12 @@
 ;    (foreach #(println (to-utf8 (:text %))) (take 10 (:tweets res)))
 ;    )
 
-;  (foreach #(println (first %) " => " (second %)) (get-twitter-rate-limit))
+  (foreach #(println (first %) " => " (second %)) (get-twitter-rate-limit))
 
-  ;(p show-twitter-status 15562499950)
+  ;(println (show-twitter-status 15562499950))
 
-;  (let [[url tw] (get-oauth-url keys/*twitter-consumer-key* keys/*twitter-consumer-secret*)]
-;    (println url)
-;    )
-  (p get-twitter-profile-image-url (get-twitter-instance))
+  ;(let [[url tw] (get-oauth-url keys/*twitter-consumer-key* keys/*twitter-consumer-secret*)]
+  ;  (println url)
+  ;  )
+  ;(println (get-twitter-profile-image-url (get-twitter-instance)))
   )
